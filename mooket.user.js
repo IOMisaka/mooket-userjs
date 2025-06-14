@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mooket
 // @namespace    http://tampermonkey.net/
-// @version      20250608.1.0
+// @version      20250615.1.0
 // @description  银河奶牛历史价格（包含强化物品）history(enhancement included) price for milkywayidle
 // @author       IOMisaka
 // @match        https://www.milkywayidle.com/*
@@ -1991,7 +1991,7 @@
   }
   /*实时市场模块*/
   const HOST = "https://mooket.qi-e.top";
-  const MWIAPI_URL = "https://raw.githubusercontent.com/holychikenz/MWIApi/main/milkyapi.json";
+  const MWIAPI_URL = "https://mooket.qi-e.top/market/api.json";
 
   class CoreMarket {
     marketData = {};//市场数据，带强化等级，存储格式{"/items/apple_yogurt:0":{ask,bid,time}}
@@ -2005,20 +2005,20 @@
       this.marketData = JSON.parse(marketDataStr);
 
       //mwiapi data
-      let mwiapiJsonStr = localStorage.getItem("MWIAPI_JSON") || localStorage.getItem("MWITools_marketAPI_json");
+      let mwiapiJsonStr = localStorage.getItem("MWIAPI_JSON_NEW");
       let mwiapiObj = null;
       if (mwiapiJsonStr) {
         mwiapiObj = JSON.parse(mwiapiJsonStr);
         this.mergeMWIData(mwiapiObj);
       }
-      if (!mwiapiObj || Date.now() / 1000 - mwiapiObj.time > 600) {//超过10分才更新
+      if (!mwiapiObj || Date.now() / 1000 - mwiapiObj.timestamp > 600) {//超过10分才更新
         fetch(MWIAPI_URL).then(res => {
           res.text().then(mwiapiJsonStr => {
             mwiapiObj = JSON.parse(mwiapiJsonStr);
             this.mergeMWIData(mwiapiObj);
             //更新本地缓存数据
-            localStorage.setItem("MWIAPI_JSON", mwiapiJsonStr);//更新本地缓存数据
-            console.info("MWIAPI_JSON updated:", new Date(mwiapiObj.time * 1000).toLocaleString());
+            localStorage.setItem("MWIAPI_JSON_NEW", mwiapiJsonStr);//更新本地缓存数据
+            console.info("MWIAPI_JSON updated:", new Date(mwiapiObj.timestamp * 1000).toLocaleString());
           })
         }).catch(err => { console.warn("MWIAPI_JSON update failed,using localdata"); });
       }
@@ -2088,9 +2088,13 @@
      * @param obj 包含市场数据的对象
      */
     mergeMWIData(obj) {
-      Object.entries(obj.market).forEach(([itemName, price]) => {
+      Object.entries(obj.marketData).forEach(([itemName, priceDict]) => {
         let itemHrid = mwi.ensureItemHrid(itemName);
-        if (itemHrid) this.updateItem(itemHrid + ":" + 0, { bid: price.bid, ask: price.ask, time: obj.time }, false);//本地更新
+        if (itemHrid) {
+          Object.entries(priceDict).forEach(([enhancementLevel, price]) => {
+            this.updateItem(itemHrid + ":" + enhancementLevel, { bid: price.b, ask: price.a, time: obj.timestamp }, false);//本地更新
+          });
+        }
       });
       this.save();
     }
@@ -3081,9 +3085,15 @@
     const interval = setInterval(() => {
       count++;
       if (count > 30) {
-        clearInterval(interval);
-        console.info("mooket 初始化超时，部分功能受限");
-        resolve();
+        if (document.querySelector(".GamePage_gamePanel__3uNKN")) {
+          clearInterval(interval);
+          console.info("mooket 初始化超时，部分功能受限");
+          resolve();
+        } else {
+          //异常
+          clearInterval(interval);
+          console.info("mooket 初始化失败");
+        }
       }//最多等待10秒
       if (document.body && mwi.character?.gameMode) {//等待必须组件加载完毕后再初始化
         clearInterval(interval);
