@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mooket
 // @namespace    http://tampermonkey.net/
-// @version      20250615.1.0
+// @version      20250621.1.0
 // @description  银河奶牛历史价格（包含强化物品）history(enhancement included) price for milkywayidle
 // @author       IOMisaka
 // @match        https://www.milkywayidle.com/*
@@ -2200,7 +2200,7 @@
     updateItem(itemHridLevel, priceObj, isFetch = true) {
       let localItem = this.marketData[itemHridLevel];
       if (isFetch) this.fetchTimeDict[itemHridLevel] = Date.now() / 1000;//fetch时间戳
-      if (!localItem || localItem.time < priceObj.time) {//服务器数据更新则更新本地数据
+      if (!localItem || localItem.time < priceObj.time || localItem.time>Date.now() / 1000) {//服务器数据更新则更新本地数据
 
         let risePercent = 0;
         if (localItem) {
