@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mooket
 // @namespace    http://tampermonkey.net/
-// @version      20250819.1.0
+// @version      20250819.1.1
 // @description  银河奶牛历史价格（包含强化物品）history(enhancement included) price for milkywayidle
 // @author       IOMisaka
 // @match        https://www.milkywayidle.com/*
@@ -2885,7 +2885,7 @@
           case "full":
             favoItemDiv.innerHTML = `
             <div title="${title}" style="display:inline-block;border:1px solid #98a7e9;">
-            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.6d12eb9d.svg#${iconName}"></use></svg>
+            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.d4d08849.svg#${iconName}"></use></svg>
             <span>${itemName}${level > 0 ? `(+${level})` : ""}</span>
             <span style="color:${priceDelta.askRise == 0 ? "white" : priceDelta.askRise > 0 ? "red" : "lime"}">${priceDelta.ask}</span>
             <span style="color:white;background-color:${priceDelta.askRise == 0 ? "black" : priceDelta.askRise > 0 ? "brown" : "green"}">${priceDelta.askRise > 0 ? "+" : ""}${priceDelta.askRise}%</span>
@@ -2897,7 +2897,7 @@
           case "iconPercent":
             favoItemDiv.innerHTML = `
             <div title="${title}" style="display:inline-block;border:1px solid #98a7e9;">
-            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.6d12eb9d.svg#${iconName}"></use></svg>
+            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.d4d08849.svg#${iconName}"></use></svg>
             <span style="color:white;background-color:${priceDelta.askRise == 0 ? "transparent" : priceDelta.askRise > 0 ? "brown" : "green"}">${priceDelta.askRise == 0 ? "" : priceDelta.askRise > 0 ? "+" + priceDelta.askRise + "%" : priceDelta.askRise + "%"}</span>
             </div>
             `;
@@ -2905,7 +2905,7 @@
           case "iconPrice":
             favoItemDiv.innerHTML = `
             <div title="${title}" style="display:inline-block;border:1px solid #98a7e9;">
-            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.6d12eb9d.svg#${iconName}"></use></svg>
+            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.d4d08849.svg#${iconName}"></use></svg>
             <span style="color:${priceDelta.askRise == 0 ? "white" : priceDelta.askRise > 0 ? "red" : "lime"}">${priceDelta.ask}</span>
             </div>
             `;
@@ -2913,7 +2913,7 @@
           case "iconFull":
             favoItemDiv.innerHTML = `
             <div title="${title}" style="display:inline-block;border:1px solid #98a7e9;">
-            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.6d12eb9d.svg#${iconName}"></use></svg>
+            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.d4d08849.svg#${iconName}"></use></svg>
             <span style="color:${priceDelta.askRise == 0 ? "white" : priceDelta.askRise > 0 ? "red" : "lime"}">${priceDelta.ask}</span>
             <span style="color:white;background-color:${priceDelta.askRise == 0 ? "black" : priceDelta.askRise > 0 ? "brown" : "green"}">${priceDelta.askRise > 0 ? "+" : ""}${priceDelta.askRise}%</span>
             </div>
@@ -2922,7 +2922,7 @@
           case "normalPercent":
             favoItemDiv.innerHTML = `
             <div title="${title}" style="display:inline-block;border:1px solid #98a7e9;">
-            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.6d12eb9d.svg#${iconName}"></use></svg>
+            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.d4d08849.svg#${iconName}"></use></svg>
             <span>${itemName}${level > 0 ? `(+${level})` : ""}</span>
             <span style="color:white;background-color:${priceDelta.askRise == 0 ? "transparent" : priceDelta.askRise > 0 ? "brown" : "green"}">${priceDelta.askRise == 0 ? "" : priceDelta.askRise > 0 ? "+" + priceDelta.askRise + "%" : priceDelta.askRise + "%"}</span>
             </div>
@@ -2931,7 +2931,7 @@
           case "normalPrice":
             favoItemDiv.innerHTML = `
               <div title="${title}" style="display:inline-block;border:1px solid #98a7e9;">
-              <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.6d12eb9d.svg#${iconName}"></use></svg>
+              <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.d4d08849.svg#${iconName}"></use></svg>
               <span>${itemName}${level > 0 ? `(+${level})` : ""}</span>
               <span style="color:${priceDelta.askRise == 0 ? "white" : priceDelta.askRise > 0 ? "red" : "lime"}">${priceDelta.ask}</span>
               </div>
@@ -2940,7 +2940,7 @@
           case "normalFull":
             favoItemDiv.innerHTML = `
             <div title="${title}" style="display:inline-block;border:1px solid #98a7e9;">
-            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.6d12eb9d.svg#${iconName}"></use></svg>
+            <svg width="15px" height="15px" style="display:inline-block"><use href="/static/media/items_sprite.d4d08849.svg#${iconName}"></use></svg>
             <span>${itemName}${level > 0 ? `(+${level})` : ""}</span>
             <span style="color:${priceDelta.askRise == 0 ? "white" : priceDelta.askRise > 0 ? "red" : "lime"}">${priceDelta.ask}</span>
             <span style="color:white;background-color:${priceDelta.askRise == 0 ? "black" : priceDelta.askRise > 0 ? "brown" : "green"}">${priceDelta.askRise > 0 ? "+" : ""}${priceDelta.askRise}%</span>
@@ -2950,7 +2950,7 @@
           default://icon
             favoItemDiv.innerHTML = `
           <div title="${title}" style="display:inline-block;border:1px solid #98a7e9;">
-          <svg width="20px" height="20px" style="display:inline-block"><use href="/static/media/items_sprite.6d12eb9d.svg#${iconName}"></use></svg>
+          <svg width="20px" height="20px" style="display:inline-block"><use href="/static/media/items_sprite.d4d08849.svg#${iconName}"></use></svg>
           </div>
           `;
         }
