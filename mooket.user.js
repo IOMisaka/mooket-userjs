@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mooket
 // @namespace    http://tampermonkey.net/
-// @version      20250819.1.1
+// @version      20251014.1.1
 // @description  银河奶牛历史价格（包含强化物品）history(enhancement included) price for milkywayidle
 // @author       IOMisaka
 // @match        https://www.milkywayidle.com/*
@@ -10,6 +10,7 @@
 // @require      https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js
 // @require      https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js
 // @require      https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@2.0.0/dist/chartjs-plugin-crosshair.min.js
+// @require      https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js
 // @run-at       document-start
 // @license MIT
 // ==/UserScript==
@@ -117,8 +118,12 @@
     fetchWithTimeout: fetchWithTimeout,//带超时的fetch
   };
   window[injectSpace] = mwi;
-
-  mwi.initClientData = JSON.parse(localStorage.getItem("initClientData") || "{}");
+  try{
+    let decData = LZString.decompressFromUTF16(localStorage.getItem("initClientData"));
+    mwi.initClientData = JSON.parse( decData);
+  }catch{
+    mwi.initClientData = JSON.parse("{}");
+  }
   mwi.isZh = localStorage.getItem("i18nextLng")?.startsWith("zh");
 
   const originalSetItem = localStorage.setItem;
