@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mooket
 // @namespace    http://tampermonkey.net/
-// @version      20251014.1.1
+// @version      20251026.1.1
 // @description  银河奶牛历史价格（包含强化物品）history(enhancement included) price for milkywayidle
 // @author       IOMisaka
 // @match        https://www.milkywayidle.com/*
@@ -20,20 +20,14 @@
   let injectSpace = "mwi";//use window.mwi to access the injected object
   if (window[injectSpace]) return;//已经注入
   //优先注册ob
-  new MutationObserver((mutationsList, obs) => {
-    mutationsList.forEach((mutationRecord) => {
-      for (const node of mutationRecord.addedNodes) {
-        if (node.src) {
-          console.log(node.src);
-          if (node.src.search(/.*main\..*\.chunk.js/) === 0) {
-            console.info("patching:" + node.src)
-            obs.disconnect();
-            patchScript(node);
-          }
-        }
+  const observer = new MutationObserver(() => {
+      const el = document.querySelector('[class^="GamePage"]');
+      if (el) {
+          observer.disconnect();
+          patchScript();
       }
-    });
-  }).observe(document, { childList: true, subtree: true });
+  });
+  observer.observe(document, { childList: true, subtree: true });
   let mwi = {//供外部调用的接口
     //由于脚本加载问题，注入有可能失败
     //修改了hookCallback，添加了回调前和回调后处理
@@ -144,42 +138,10 @@
       dispatchEvent(new Event("MWILangChanged"));
     }
   });
-  async function patchScript(node) {
+  async function patchScript() {
     try {
-      const scriptUrl = node.src;
-      node.remove();
-      const response = await fetch(scriptUrl);
-      if (!response.ok) throw new Error(`Failed to fetch script: ${response.status}`);
-
-      let sourceCode = await response.text();
-
-      // Define injection points as configurable patterns
-      const injectionPoints = [
-        {
-          pattern: "xa.a.use",
-          replacement: `window.${injectSpace}.lang=wa;xa.a.use`,
-          description: "注入语言翻译对象"
-        },
-        {
-          pattern: "this.sendPing=",
-          replacement: `window.${injectSpace}.game=this,this.sendPing=`,
-          description: "注入游戏对象"
-
-        }
-      ];
-
-      injectionPoints.forEach(({ pattern, replacement, description }) => {
-        if (sourceCode.includes(pattern)) {
-          sourceCode = sourceCode.replace(pattern, replacement);
-          console.info(`MWICore injecting: ${description}`);
-        } else {
-          console.warn(`MWICore injecting failed: ${description}`);
-        }
-      });
-
-      const newNode = document.createElement('script');
-      newNode.textContent = sourceCode;
-      document.body.appendChild(newNode);
+      window[injectSpace].game = (e => e?.[Object.keys(e).find(k => k.startsWith('__reactFiber$'))]?.return?.stateNode)(document.querySelector('[class^="GamePage"]'));
+      window[injectSpace].lang = window[injectSpace].game.props.i18n.options.resources;
       console.info('MWICore patched successfully.')
     } catch (error) {
       console.error('MWICore patching failed:', error);
