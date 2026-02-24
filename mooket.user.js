@@ -141,7 +141,7 @@
   });
   async function patchScript() {
     try {
-      window[injectSpace].game = (e => e?.[Object.keys(e).find(k => k.startsWith('__reactFiber$'))]?.return?.stateNode)(document.querySelector('[class^="GamePage"]'));
+      window[injectSpace].game = (e => e?.[Reflect.ownKeys(e).find(k => k.startsWith('__reactFiber$'))]?.return?.stateNode)(document.querySelector('[class^="GamePage"]'));
       window[injectSpace].lang = window[injectSpace].game.props.i18n.options.resources;
       console.info('MWICore patched successfully.')
     } catch (error) {
