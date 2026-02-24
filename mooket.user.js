@@ -3358,16 +3358,17 @@
           let enhancementLevel = parseInt(levelStr?.textContent.replace("+", "") || "0");
           let itemHrid = "/items/" + currentItem?.querySelector(".Icon_icon__2LtL_ use").href.baseVal.split("#")[1];
           let itemHridLevel = itemHrid + ":" + enhancementLevel;
-          if (itemHrid) {
+          if (itemHrid && currentItem) {
             if (lastItemHridLevel !== itemHridLevel) {//防止重复请求
               //显示历史价格
 
               let tradeHistoryDiv = document.querySelector("#mooket_tradeHistory");
-              if (currentItem && !tradeHistoryDiv) {
+              if (!tradeHistoryDiv) {
                 tradeHistoryDiv = document.createElement("div");
                 tradeHistoryDiv.id = "mooket_tradeHistory";
                 tradeHistoryDiv.style.position = "absolute";
                 tradeHistoryDiv.style.marginTop = "-24px";
+                tradeHistoryDiv.style.whiteSpace = "nowrap";
                 tradeHistoryDiv.style.left = "50%";
                 tradeHistoryDiv.style.transform = "translateX(-50%)";
                 tradeHistoryDiv.title = mwi.isZh ? "我的最近买/卖价格" : "My recently buy/sell price";
